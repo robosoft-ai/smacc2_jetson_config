@@ -153,6 +153,11 @@ curl -s https://1449136d7e9e98bb9b74997f87835c3b56a84d379c06b929:@packagecloud.i
 
 sudo apt -y install ros-humble-smacc2-rta
 
+# --- Installing Utilities ---
+echo "Installing utility applications..."
+sudo apt install simplescreenrecorder -y
+sudo apt install vlc -y
+sudo apt install putty -y
 
 # --- Final Steps ---
 # Check if reboot is needed
