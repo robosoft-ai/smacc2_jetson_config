@@ -67,6 +67,8 @@ log_message "INFO" "Starting dolphin installation..."
 sudo apt install konsole -y
 log_message "INFO" "Konsole install completed."
 sudo apt install dolphin -y
+# Running so it can be easily added to sidebar favorites
+dolphin
 log_message "INFO" "Dolphin install completed."
 
 
@@ -178,7 +180,7 @@ echo "simplescreenrecorder Installed..."
 
 ## Install VLC ##
 sudo apt install vlc -y
-# Running so it can be easily added to sidebar favorites
+ 
 vlc
 echo "VLC Installed..."
 
