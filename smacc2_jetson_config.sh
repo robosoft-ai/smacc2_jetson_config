@@ -2,7 +2,8 @@
 
 # smacc2_jetson_config.sh: Automate post-flashing setup for NVIDIA Jetson Orin with logging
 
-# --- Logging Setup ---
+
+### --- LOGGING SETUP --- ###
 LOG_DIR="$(pwd)" # Log directory (current directory)
 LOG_FILE="${LOG_DIR}/setup_jetson_$(date +%Y%m%d_%H%M%S).log"
 touch "$LOG_FILE" # Create the log file upfront
@@ -40,50 +41,59 @@ log_command_output() {
 }
 
 
-# --- Script Start ---
+### --- SCRIPT START --- ###
 log_message "INFO" "Starting SMACC2 Jetson Config script. Log file: $LOG_FILE"
-
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-# --- System Update ---
-log_message "INFO" "Starting system update..."
+### --- APT UPDATE & UPGRADE --- ###
+## APT Update ##
+log_message "INFO" "Starting APT update..."
 # Optional: Use log_command_output if you want detailed apt logs in the file
 # log_command_output sudo apt update
 sudo apt update 
-log_message "INFO" "System update completed."
+log_message "INFO" "APT update completed."
 
-# --- System Upgrade ---
-log_message "INFO" "Starting system update and upgrade..."
+## APT Upgrade ##
+log_message "INFO" "Starting APT update and upgrade..."
 # Optional: Use log_command_output if you want detailed apt logs in the file
 # log_command_output sudo apt upgrade -y
 sudo apt upgrade -y
-log_message "INFO" "System upgrade completed."
+log_message "INFO" "APT upgrade completed."
 
-# --- Install Dolphin ---
+
+### --- Install Dolphin --- ###
 log_message "INFO" "Starting dolphin installation..."
 sudo apt install konsole -y
 log_message "INFO" "Konsole install completed."
 sudo apt install dolphin -y
+# Running so it can be easily added to sidebar favorites
+dolphin
 log_message "INFO" "Dolphin install completed."
 
-# --- Python pip Installation ---
+
+### --- Python pip INSTALL --- ###
 log_message "INFO" "Installing Python3 pip..."
 # Optional: Use log_command_output for detailed apt logs
 # log_command_output sudo apt install python3-pip -y
 sudo apt install python3-pip -y # Added -y to avoid prompt
 log_message "INFO" "Python3 pip installation completed."
 
-# --- ROS2 Humble Install ---
-#Set Locale
-locale  # check for UTF-8
 
+### --- ROS2 HUMBLE INSTALL --- ###
+# Source - https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+
+# Set Locale
+locale  
+
+# check for UTF-8
 sudo apt update && sudo apt install locales -y
 sudo locale-gen en_US en_US.UTF-8
 sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-locale  # verify settings
+locale  
+# verify settings
 log_message "INFO" "Locale Set..."
 
 # Add ROS2 Apt Repos 
@@ -95,22 +105,24 @@ export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrast
 curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $VERSION_CODENAME)_all.deb" # If using Ubuntu derivates use $UBUNTU_CODENAME
 sudo dpkg -i /tmp/ros2-apt-source.deb
 
-# Install ROS2 Desktop
+## Install ROS2 Desktop ##
 sudo apt install ros-humble-desktop -y
-# Install ROS2 Dev Tools
+
+## Install ROS2 Dev Tools ##
 sudo apt install ros-dev-tools -y
-# Source your environment
+
+# Source your environment #
 source /opt/ros/humble/setup.bash
 log_message "INFO" "ROS2 Installed..."
 
-# --- rosdep Intall ---
+## rosdep Intall ##
 apt-get install python3-rosdep -y
-
 sudo rosdep init
 rosdep update
 log_message "INFO" "rosdep Installed..."
 
-# --- Create workspace ---
+
+### --- CREATE ROS2/IsaacROSDev WORKSPACE --- ###
 log_message "INFO" "Creating isaac_ros-dev workspace..."
 mkdir workspaces
 cd workspaces
@@ -122,7 +134,8 @@ cd ..
 echo "export ISAAC_ROS_WS=${HOME}/workspaces/isaac_ros-dev/" >> ~/.bashrc
 source ~/.bashrc
 
-# --- VS Code Installation ---
+
+### --- VSCode INSTALLATION --- ###
 echo "Installing required dependencies..."
 sudo apt-get install wget gpg
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -130,31 +143,81 @@ sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/
 echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
 rm -f packages.microsoft.gpg
 
-echo "Installing Visual Studio Code..."
+echo "Installing VS Code..."
 sudo apt install apt-transport-https
 sudo apt update
 sudo apt install code
 
-echo "Verifying installation..."
+echo "Verifying VSCode installation..."
 # Verify as the original user if possible, otherwise check directly
   # Fallback: verify directly (e.g., running as root)
   if command -v code >/dev/null 2>&1; then
-    echo "VS Code version:"
+    echo "VSCode version:"
     code --version
-    echo "Visual Studio Code installed successfully!"
+    echo "VSCode installed successfully!"
   else
-    echo "Error: Visual Studio Code installation failed."
+    echo "Error: VSCode installation failed."
     exit 1
   fi
 
-# --- SMACC2_RTA Installation ---
+
+### --- SMACC2_RTA Installation --- ###
 echo "Installing required dependencies..."
 curl -s https://1449136d7e9e98bb9b74997f87835c3b56a84d379c06b929:@packagecloud.io/install/repositories/robosoft-ai/SMACC2_RTA-academic/script.deb.sh | sudo bash
 
 sudo apt -y install ros-humble-smacc2-rta
+echo "SMACC2 RTA Installed..."
 
 
-# --- Final Steps ---
+### --- INSTALLING UTILITIES --- ###
+echo "Installing utility applications..."
+
+## Install SimpleScreenRecorder ##
+sudo apt install simplescreenrecorder -y
+# Running so it can be easily added to sidebar favorites
+simplescreenrecorder
+echo "simplescreenrecorder Installed..."
+
+## Install VLC ##
+sudo apt install vlc -y
+ 
+vlc
+echo "VLC Installed..."
+
+## Install PUTTY ##
+sudo apt install putty -y
+# Running so it can be easily added to sidebar favorites
+putty
+echo "PUTTY Installed..."
+
+## Install Terminator ##
+sudo apt install terminator -y
+# Running so it can be easily added to sidebar favorites
+terminator
+echo "Terminator Installed..."
+
+## Installing Anydesk ##
+# Source - https://deb.anydesk.com/howto.html
+
+# First add the AnyDesk GPG key
+sudo apt update
+sudo apt install ca-certificates curl apt-transport-https
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://keys.anydesk.com/repos/DEB-GPG-KEY -o /etc/apt/keyrings/keys.anydesk.com.asc
+sudo chmod a+r /etc/apt/keyrings/keys.anydesk.com.asc
+
+# Add the AnyDesk apt repository
+echo "deb [signed-by=/etc/apt/keyrings/keys.anydesk.com.asc] https://deb.anydesk.com all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list > /dev/null
+
+# Update apt caches and install the AnyDesk client
+sudo apt update
+sudo apt install anydesk -y
+# Running so it can be easily added to sidebar favorites
+anydesk
+echo "Anydesk Installed..."
+
+
+### --- FINAL STEPS --- ###
 # Check if reboot is needed
 if [ -f /var/run/reboot-required ]; then
   log_message "INFO" "System indicates a reboot is required."
