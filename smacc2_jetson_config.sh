@@ -67,8 +67,8 @@ log_message "INFO" "Starting dolphin installation..."
 sudo apt install konsole -y
 log_message "INFO" "Konsole install completed."
 sudo apt install dolphin -y
-# Running so it can be easily added to sidebar favorites
-dolphin
+# Running so it can be easily added to sidebar favorites, & makes it non-blocking.
+dolphin &
 log_message "INFO" "Dolphin install completed."
 
 
@@ -180,20 +180,21 @@ echo "simplescreenrecorder Installed..."
 
 ## Install VLC ##
 sudo apt install vlc -y
- 
-vlc
+
+## Running VLC, & makes it non-blocking.
+vlc &
 echo "VLC Installed..."
 
 ## Install PUTTY ##
 sudo apt install putty -y
-# Running so it can be easily added to sidebar favorites
-putty
+# Running so it can be easily added to sidebar favorites, & makes it non-blocking.
+putty &
 echo "PUTTY Installed..."
 
 ## Install Terminator ##
 sudo apt install terminator -y
-# Running so it can be easily added to sidebar favorites
-terminator
+# Running so it can be easily added to sidebar favorites, & makes it non-blocking.
+terminator &
 echo "Terminator Installed..."
 
 ## Installing Anydesk ##
@@ -212,8 +213,8 @@ echo "deb [signed-by=/etc/apt/keyrings/keys.anydesk.com.asc] https://deb.anydesk
 # Update apt caches and install the AnyDesk client
 sudo apt update
 sudo apt install anydesk -y
-# Running so it can be easily added to sidebar favorites
-anydesk
+# Running so it can be easily added to sidebar favorites, & makes it non-blocking.
+anydesk &
 echo "Anydesk Installed..."
 
 
