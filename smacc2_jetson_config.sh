@@ -217,6 +217,23 @@ sudo apt install anydesk -y
 anydesk &
 echo "Anydesk Installed..."
 
+### --- JETSON HARDWARE CONFIGURATION --- ###
+
+## CAN Enablement (Incomplete) ###
+sudo apt-get install busybox -y
+
+# Insert The CAN BUS subsystem support module:
+modprobe can
+# Insert the raw CAN protocol module (CAN-ID filtering):
+modprobe can_raw
+# Add real CAN interface support 
+modprobe mttcan
+
+ip link set can0 up type can bitrate 500000 dbitrate 1000000 berr-reporting on fd on
+ip link set can1 up type can bitrate 500000 dbitrate 1000000 berr-reporting on fd on
+
+sudo apt-get install can-utils -y
+
 
 ### --- FINAL STEPS --- ###
 # Check if reboot is needed
