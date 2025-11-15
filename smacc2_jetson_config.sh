@@ -81,7 +81,7 @@ log_message "INFO" "Python3 pip installation completed."
 
 
 ### --- ROS2 JAZZY INSTALL --- ###
-# Source - https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+# Source - https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 
 # Set Locale
 locale  
@@ -105,6 +105,9 @@ export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrast
 curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $VERSION_CODENAME)_all.deb" # If using Ubuntu derivates use $UBUNTU_CODENAME
 sudo dpkg -i /tmp/ros2-apt-source.deb
 
+sudo apt update
+sudo apt upgrade -y
+
 ## Install ROS2 Desktop ##
 sudo apt install ros-jazzy-desktop -y
 
@@ -116,7 +119,7 @@ source /opt/ros/jazzy/setup.bash
 log_message "INFO" "ROS2 Installed..."
 
 ## rosdep Intall ##
-apt-get install python3-rosdep -y
+sudo apt-get install python3-rosdep -y
 sudo rosdep init
 rosdep update
 log_message "INFO" "rosdep Installed..."
@@ -223,6 +226,36 @@ sudo apt install synaptic -y
 sudo synaptic &
 echo "Synaptic Installed..."
 
+## Installing Kazam ##
+sudo apt install kazam -y
+# Running so it can be easily added to sidebar favorites, & makes it non-blocking.
+kazam &
+echo "Kazam Installed..."
+
+### --- CLAUDE CODE INSTALLATION --- ###
+
+cd ~/workspaces/isaac_ros-dev
+
+## Download and install nvm ##
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+# in lieu of restarting the shell
+\. "$HOME/.nvm/nvm.sh"
+
+# Download and install Node.js:
+nvm install 22
+
+# Verify the Node.js version:
+node -v # Should print "v22.18.0".
+nvm current # Should print "v22.18.0".
+
+# Verify npm version:
+npm -v # Should print "10.9.3".
+
+## Install claude code ##
+npm install -g @anthropic-ai/claude-code
+
+
 ### --- JETSON HARDWARE CONFIGURATION --- ###
 
 ## CAN Enablement (Incomplete) ###
@@ -239,7 +272,6 @@ ip link set can0 up type can bitrate 500000 dbitrate 1000000 berr-reporting on f
 ip link set can1 up type can bitrate 500000 dbitrate 1000000 berr-reporting on fd on
 
 sudo apt-get install can-utils -y
-
 
 ### --- FINAL STEPS --- ###
 # Check if reboot is needed
