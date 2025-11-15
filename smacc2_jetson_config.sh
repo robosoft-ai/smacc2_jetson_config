@@ -217,6 +217,12 @@ sudo apt install anydesk -y
 anydesk &
 echo "Anydesk Installed..."
 
+## Installing Synaptic ##
+sudo apt install synaptic -y
+# Running so it can be easily added to sidebar favorites, & makes it non-blocking.
+sudo synaptic &
+echo "Synaptic Installed..."
+
 ### --- JETSON HARDWARE CONFIGURATION --- ###
 
 ## CAN Enablement (Incomplete) ###
