@@ -80,7 +80,7 @@ sudo apt install python3-pip -y # Added -y to avoid prompt
 log_message "INFO" "Python3 pip installation completed."
 
 
-### --- ROS2 HUMBLE INSTALL --- ###
+### --- ROS2 JAZZY INSTALL --- ###
 # Source - https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
 
 # Set Locale
@@ -106,13 +106,13 @@ curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-a
 sudo dpkg -i /tmp/ros2-apt-source.deb
 
 ## Install ROS2 Desktop ##
-sudo apt install ros-humble-desktop -y
+sudo apt install ros-jazzy-desktop -y
 
 ## Install ROS2 Dev Tools ##
 sudo apt install ros-dev-tools -y
 
 # Source your environment #
-source /opt/ros/humble/setup.bash
+source /opt/ros/jazzy/setup.bash
 log_message "INFO" "ROS2 Installed..."
 
 ## rosdep Intall ##
