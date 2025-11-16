@@ -79,6 +79,12 @@ log_message "INFO" "Installing Python3 pip..."
 sudo apt install python3-pip -y # Added -y to avoid prompt
 log_message "INFO" "Python3 pip installation completed."
 
+### --- Clang Format INSTALL --- ###
+log_message "INFO" "Installing clang-format..."
+# Optional: Use log_command_output for detailed apt logs
+# log_command_output sudo apt install clang-format -y
+sudo apt install clang-format -y # Added -y to avoid prompt
+log_message "INFO" "clang-format installation completed."
 
 ### --- ROS2 HUMBLE INSTALL --- ###
 # Source - https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
